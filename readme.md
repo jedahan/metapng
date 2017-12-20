@@ -1,3 +1,12 @@
-metapng is a super simple png metadata writer/reader
+metapng hides something wonderful inside pngs
 
-it depends on javax. it would be nice to port to pngj maybe
+<img src="meta.png" alt="metapng" title="metapng" align="right" />
+
+we can see what it knows...
+
+    (:require [metapng.core :as metapng]))
+    (:name (metapng/get-metadata "meta.png"))
+
+or perhaps write our own genesis when playing with quil...
+
+    (metapng/bake "boring.png" "meta.png" {:code (slurp *file*)})
