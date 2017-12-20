@@ -1,6 +1,6 @@
 metapng hides something wonderful inside pngs
 
-<img src="meta.png" alt="metapng" title="metapng" align="right" />
+<img src="meta.png" alt="metapng" title="metapng" align="right" width=400 />
 
 we can see what it knows...
 
