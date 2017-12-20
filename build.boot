@@ -1,5 +1,5 @@
 (def project 'metapng)
-(def version "0.1")
+(def version "0.1.1")
 
 (set-env! :dependencies '[[adzerk/bootlaces  "0.1.13" :scope "test"]])
 
