@@ -11,10 +11,9 @@
            (javax.imageio.stream FileImageOutputStream)))
 
 (defn get-metadata
-  "Extract hashmap of metadata from filename"
-  [filename]
-  (->> filename
-    (File.)
+  "Extract hashmap of metadata from file"
+  [^File file]
+  (->> file
     (PngReader.)
     (.getChunksList)
     (.getChunks)
@@ -24,7 +23,7 @@
     (apply hash-map)))
 
 (defn set-metadata
-  "Set a metadata field on a PNG, creating metadata if needed."
+  "Set a metadata field on a PNG, creating metadata if needed"
   [^IIOImage image [text-keyword text-text]]
   (if (nil? (.getMetadata image))
     (.setMetadata image (PNGMetadata.)))
@@ -35,9 +34,9 @@
 
 (defn write-image
   "Write the image to a file"
-  [output-file-name ^RenderedImage image]
+  [^String output-filename ^RenderedImage image]
   (let [writer (.next (ImageIO/getImageWritersBySuffix "png"))]
-     (.setOutput writer (FileImageOutputStream. (File. output-file-name)))
+     (.setOutput writer (FileImageOutputStream. (File. output-filename)))
      (.write writer nil image nil)))
 
 (defn bake
@@ -46,7 +45,8 @@
   (bake \"boring.png\" \"meta.png\" {:atk 20})
   "
   [input-filename output-filename new-metadata]
-  (let [image (IIOImage. (ImageIO/read (File. input-filename)) nil nil)
-        metadata (conj (get-metadata input-filename) new-metadata)]
+  (let [file (File. input-filename)
+        image (IIOImage. (ImageIO/read file) nil nil)
+        metadata (conj (get-metadata file) new-metadata)]
     (write-image output-filename
                 (reduce set-metadata image (vec metadata)))))

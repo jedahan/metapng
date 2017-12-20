@@ -3,5 +3,6 @@
             [clojure.test :as t]))
 
 (defn get-metadata []
-  (t/is (= (metapng/get-metadata "meta.png")
-         {:test "beautiful"})))
+  (let [metadata (metapng/get-metadata "meta.png")]
+    (t/is (= "metapod" (:name metadata)))
+    (t/is (= "11" (:id metadata)))))
