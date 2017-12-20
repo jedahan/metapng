@@ -7,10 +7,17 @@ we can see what it knows...
 ```clojure
     (:require [metapng.core :as metapng]))
     (:name (metapng/get-metadata "meta.png"))
+    => "metapod"
 ```
 
 or perhaps write our own genesis when playing with quil...
 
 ```clojure
     (metapng/bake "boring.png" "meta.png" {:code (slurp *file*)})
+```
+
+it can be caught on clojars
+
+```clojure
+    [metapng "0.1.1"]
 ```
