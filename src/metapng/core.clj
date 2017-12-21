@@ -18,9 +18,8 @@
     (.getChunksList)
     (.getChunks)
     (filter #(ChunkHelper/isText %))
-    (map (fn [ch] [(keyword (.getKey ch)) (.getVal ch)]))
-    (flatten)
-    (apply hash-map)))
+    (map #(vector (keyword (.getKey %)) (.getVal %)))
+    (into {})))
 
 (defn set-metadata
   "Set a metadata field on a PNG, creating metadata if needed"
@@ -49,4 +48,4 @@
         image (IIOImage. (ImageIO/read file) nil nil)
         metadata (conj (get-metadata file) new-metadata)]
     (write-image output-filename
-                (reduce set-metadata image (vec metadata)))))
+                (reduce set-metadata image metadata))))
