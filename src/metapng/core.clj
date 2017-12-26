@@ -12,8 +12,9 @@
 
 (defn get-metadata
   "Extract hashmap of metadata from file"
-  [^File file]
-  (->> file
+  [^String filename]
+  (->> filename
+    (File.)
     (PngReader.)
     (.getChunksList)
     (.getChunks)
@@ -33,19 +34,23 @@
 
 (defn write-image
   "Write the image to a file"
-  [^String output-filename ^RenderedImage image]
+  [^String filename ^RenderedImage image]
   (let [writer (.next (ImageIO/getImageWritersBySuffix "png"))]
-     (.setOutput writer (FileImageOutputStream. (File. output-filename)))
+     (.setOutput writer (FileImageOutputStream. (File. filename)))
      (.write writer nil image nil)))
 
-(defn bake
-  "Bake keywords into an image
+(defn load-image
+  "Load image from file"
+  [^String filename]
+  (IIOImage. (ImageIO/read (File. filename)) nil nil))
 
-  (bake \"boring.png\" \"meta.png\" {:atk 20})
-  "
-  [input-filename output-filename new-metadata]
-  (let [file (File. input-filename)
-        image (IIOImage. (ImageIO/read file) nil nil)
-        metadata (conj (get-metadata file) new-metadata)]
-    (write-image output-filename
-                (reduce set-metadata image metadata))))
+(defmulti bake (fn [image-or-file & _] (class image-or-file)))
+
+(defmethod bake IIOImage [image filename metadata]
+  (write-image filename
+    (reduce set-metadata image metadata)))
+
+(defmethod bake String [input-filename filename new-metadata]
+   (let [image (load-image input-filename)
+         metadata (conj new-metadata (get-metadata input-filename))]
+    (bake image filename metadata)))

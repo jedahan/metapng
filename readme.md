@@ -16,10 +16,16 @@ or perhaps write our own genesis when playing with quil...
 (metapng/bake "boring.png" "meta.png" {:code (slurp *file*)})
 ```
 
+maybe we are writing an image for the first time, like in clojure2d
+
+```clojure
+(metapng/bake (.buffer canvas) "meta.png" {:code (slurp *file*)})
+```
+
 it can be caught on clojars
 
 ```clojure
-[metapng "0.1.1"]
+[metapng "0.1.2"]
 ```
 
 a more fruitful example, from an old [sketch][]
